@@ -10,3 +10,5 @@
         project_path: "./terraform"
         state: present
         force_init: true
+      environment:
+        TF_IN_AUTOMATION: "true"
