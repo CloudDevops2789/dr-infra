@@ -1,0 +1,12 @@
+- name: Deploy DR Infra
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Run Terraform
+      community.general.terraform:
+        project_path: "./terraform"
+        state: present
+        force_init: true
