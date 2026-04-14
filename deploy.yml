@@ -12,3 +12,4 @@
         force_init: true
       environment:
         TF_IN_AUTOMATION: "true"
+        TF_INPUT: "false"
