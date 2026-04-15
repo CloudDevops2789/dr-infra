@@ -10,6 +10,17 @@
         project_path: "./terraform"
         state: present
         force_init: true
+      register: tf_output
       environment:
         TF_IN_AUTOMATION: "true"
         TF_INPUT: "false"
+    # Adding Outpout variable to show the public IP of the EC2 instance    
+    - name: Show Terraform output
+      debug:
+        var: tf_output.outputs
+    - name: Print ec2 instance public IP
+      debug:
+        msg: "EC2 Public IP: {{ tf_output.outputs.ec2_public_ip.value }}"
+    - name: Show change status
+      debug:
+      msg: "Terraform changed: {{ tf_output.changed }}"
