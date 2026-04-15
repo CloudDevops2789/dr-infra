@@ -1,0 +1,20 @@
+- name: Destroy DR Infra
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+
+    - name: Terraform destroy
+      community.general.terraform:
+        project_path: "./terraform"
+        state: absent
+        force_init: true
+      register: tf_output
+      environment:
+        TF_IN_AUTOMATION: "true"
+        TF_INPUT: "false"
+
+    - name: Show destroy result
+      debug:
+        msg: "Infrastructure destroyed successfully"
