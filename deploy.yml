@@ -24,3 +24,7 @@
     - name: Show change status
       debug:
         msg: "Terraform changed: {{ tf_output.changed }}"
+    - name: Pass EC2 IP to next job (AWX workflow)
+      set_stats:
+        data:
+          target_host: "{{ tf_output.outputs.ec2_public_ip.value }}"
