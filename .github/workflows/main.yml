@@ -1,0 +1,13 @@
+name: Test AWX Connectivity
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-awx:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test AWX connectivity
+        run: |
+          curl -k "${{ secrets.AWX_URL }}"
