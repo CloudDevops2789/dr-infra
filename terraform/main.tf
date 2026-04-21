@@ -55,9 +55,6 @@ resource "aws_route_table" "dr_rt" {
 resource "aws_route_table_association" "dr_rta" {
   subnet_id      = aws_subnet.dr_subnet.id
   route_table_id = aws_route_table.dr_rt.id
-  tags = {
-    Name = "dr-${var.environment}-rta"
-  }
 }
 
 # ------------------------
