@@ -10,21 +10,29 @@
         project_path: "./terraform"
         state: present
         force_init: true
+        backend_config:
+          bucket: "{{ 'dr-terraform-state-storage' if env == 'prod' else 'dr-terraform-state-storage-test' }}"
+          key: "dr-infra/terraform.tfstate"
+          region: "ap-south-1"
+          dynamodb_table: "terraform-lock"
+        variables:
+          environment: "{{ env }}"
       register: tf_output
       environment:
         TF_IN_AUTOMATION: "true"
         TF_INPUT: "false"
-    # Adding Outpout variable to show the public IP of the EC2 instance    
-    - name: Show Terraform output
+
+    - name: Get EC2 IP
+      command: terraform output -raw ec2_public_ip
+      args:
+        chdir: "./terraform"
+      register: ec2_ip
+
+    - name: Show EC2 IP
       debug:
-        var: tf_output.outputs
-    - name: Print ec2 instance public IP
-      debug:
-        msg: "EC2 Public IP: {{ tf_output.outputs.ec2_public_ip.value }}"
-    - name: Show change status
-      debug:
-        msg: "Terraform changed: {{ tf_output.changed }}"
-    - name: Pass EC2 IP to next job (AWX workflow)
+        msg: "EC2 Public IP: {{ ec2_ip.stdout }}"
+
+    - name: Pass EC2 IP to next job
       set_stats:
         data:
-          target_host: "{{ tf_output.outputs.ec2_public_ip.value }}"
+          target_host: "{{ ec2_ip.stdout }}"
