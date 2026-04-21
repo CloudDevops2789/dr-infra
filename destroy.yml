@@ -5,12 +5,22 @@
 
   tasks:
 
-    - name: Terraform destroy
-      community.general.terraform:
-        project_path: "./terraform"
-        state: absent
-        force_init: true
-      register: tf_output
+    - name: Terraform Init (env-aware)
+      command: >
+        terraform init -reconfigure
+        -backend-config="bucket={{ 'dr-terraform-state-storage' if env == 'prod' else 'dr-terraform-state-storage-test' }}"
+        -backend-config="key=dr-infra/terraform.tfstate"
+        -backend-config="region=ap-south-1"
+        -backend-config="dynamodb_table=terraform-lock"
+      args:
+        chdir: "./terraform"
+
+    - name: Terraform Destroy
+      command: >
+        terraform destroy -auto-approve
+        -var="environment={{ env }}"
+      args:
+        chdir: "./terraform"
       environment:
         TF_IN_AUTOMATION: "true"
         TF_INPUT: "false"
