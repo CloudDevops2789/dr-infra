@@ -5,7 +5,7 @@ resource "aws_vpc" "dr_vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "dr-vpc"
+    Name = "dr-${var.environment}-vpc"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_subnet" "dr_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "dr-public-subnet"
+    Name = "dr-${var.environment}-public-subnet"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_internet_gateway" "dr_igw" {
   vpc_id = aws_vpc.dr_vpc.id
 
   tags = {
-    Name = "dr-igw"
+    Name = "dr-${var.environment}-igw"
   }
 }
 
@@ -45,7 +45,7 @@ resource "aws_route_table" "dr_rt" {
   }
 
   tags = {
-    Name = "dr-rt"
+    Name = "dr-${var.environment}-rt"
   }
 }
 
@@ -93,6 +93,9 @@ resource "aws_security_group" "dr_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags = {
+    Name = "dr-${var.environment}-sg"
+  }
 }
 
 # ------------------------
@@ -110,6 +113,6 @@ resource "aws_instance" "dr_server" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "dr-server"
+    Name = "dr-${var.environment}-server"
   }
 }

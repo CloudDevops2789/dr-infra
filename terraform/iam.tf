@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ec2_s3_role" {
-  name = "ec2-s3-dr-role"
+  name = "ec2-s3-dr-role-${var.environment}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -21,6 +21,6 @@ resource "aws_iam_role_policy_attachment" "s3_access" {
 }
 
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "ec2-s3-dr-profile"
+  name = "ec2-s3-dr-profile-${var.environment}"
   role = aws_iam_role.ec2_s3_role.name
 }
