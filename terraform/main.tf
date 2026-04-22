@@ -1,5 +1,5 @@
 # ------------------------
-# VPC
+# VPC THIS IS VPC
 # ------------------------
 resource "aws_vpc" "dr_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -9,9 +9,9 @@ resource "aws_vpc" "dr_vpc" {
   }
 }
 
-# ------------------------
+# -------------------------
 # Public Subnet
-# ------------------------
+# -------------------------
 resource "aws_subnet" "dr_subnet" {
   vpc_id                  = aws_vpc.dr_vpc.id
   cidr_block              = "10.0.1.0/24"
@@ -102,9 +102,9 @@ resource "aws_security_group" "dr_sg" {
 # EC2 Instance
 # ------------------------
 resource "aws_instance" "dr_server" {
-  ami           = "ami-07216ac99dc46a187" # Ubuntu 22.04 (verify region)
-  instance_type = "t3.micro"
-  key_name      = "aws_dr_key"
+  ami                  = "ami-07216ac99dc46a187" # Ubuntu 22.04 (verify region)
+  instance_type        = "t3.micro"
+  key_name             = "aws_dr_key"
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
 
   subnet_id              = aws_subnet.dr_subnet.id
