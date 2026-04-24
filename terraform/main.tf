@@ -1,5 +1,5 @@
 # ------------------------
-# VPC THIS IS VPC
+# VPC - TEST GITHUB ACTIONS
 # ------------------------
 resource "aws_vpc" "dr_vpc" {
   cidr_block = "10.0.0.0/16"
