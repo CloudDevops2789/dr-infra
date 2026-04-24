@@ -1,12 +1,14 @@
-name: Terraform CI (DEV)
+name: Terraform CI (DEV and PROD)
 
 on:
   pull_request:
     branches:
       - development
+      - main
   push:
     branches:
       - development
+      - main
 
 permissions:
   contents: read
@@ -28,6 +30,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Configure AWS Credentials (DEV)
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -45,22 +50,48 @@ jobs:
             -backend-config="dynamodb_table=terraform-lock"
 
       - name: Terraform Format Check
-        run: terraform fmt -check -recursive
+        run: |
+          echo "---- TERRAFORM FORMAT CHECK ----"
+          terraform fmt -check -recursive || (echo "Formatting issues detected"; exit 1)
+          echo "Formatting OK"
 
       - name: Terraform Validate
-        run: terraform validate
+        run: |
+          echo "---- TERRAFORM VALIDATE ----"
+          terraform validate
 
-      - name: Terraform Plan (capture output)
+      - name: Terraform Plan (clean output)
         id: plan
         run: |
-          terraform plan -no-color -var="environment=dev" > plan.txt
-          cat plan.txt
+          echo "---- TERRAFORM PLAN ----"
 
-      - name: Upload Plan Artifact (optional)
+          terraform plan -no-color -out=tfplan -var="environment=dev"
+
+          terraform show -json tfplan > plan.json
+
+          echo "---- RESOURCE CHANGES ----" > plan-summary.txt
+
+          cat plan.json | jq -r '
+            .resource_changes[] |
+            .change.actions as $a |
+            if ($a | index("create")) then "+ " + .type
+            elif ($a | index("update")) then "~ " + .type
+            elif ($a | index("delete")) then "- " + .type
+            else empty end
+          ' | sort | uniq >> plan-summary.txt
+
+          echo "" >> plan-summary.txt
+          echo "---- SUMMARY ----" >> plan-summary.txt
+
+          terraform show -no-color tfplan | grep "Plan:" >> plan-summary.txt
+
+          cat plan-summary.txt
+
+      - name: Upload Plan Artifact
         uses: actions/upload-artifact@v4
         with:
           name: terraform-plan
-          path: terraform/plan.txt
+          path: terraform/plan-summary.txt
 
       - name: Comment Plan on PR
         if: github.event_name == 'pull_request'
@@ -68,16 +99,11 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const plan = fs.readFileSync('terraform/plan.txt', 'utf8');
-
-            const maxLength = 65000;
-            const trimmedPlan = plan.length > maxLength 
-              ? plan.substring(0, maxLength) + "\n\n...output truncated..."
-              : plan;
+            const plan = fs.readFileSync('terraform/plan-summary.txt', 'utf8');
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "### Terraform Plan Output\n\n```\n" + trimmedPlan + "\n```"
+              body: "### Terraform Plan (Summary)\n\n```\n" + plan + "\n```"
             });
