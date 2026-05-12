@@ -1,5 +1,5 @@
 variable "environment" {
-  description = "The environment for which to deploy the infrastructure (e.g., dev, staging, prod)."
+  description = "The environment for which to deploy the infrastructure."
   type        = string
 }
 
@@ -30,4 +30,5 @@ variable "public_subnet_cidr" {
 variable "key_name" {
   description = "AWS EC2 Key Pair name."
   type        = string
+  default     = "aws_dr_key"
 }
