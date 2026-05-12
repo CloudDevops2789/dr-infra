@@ -1,4 +1,7 @@
-output "ec2_public_ip" {
-  description = "Public IP address of the EC2 instance"
-  value       = aws_instance.dr_server.public_ip
+output "dc_public_ip" {
+  value = aws_instance.dc_server.public_ip
+}
+
+output "web_public_ip" {
+  value = aws_instance.web_server.public_ip
 }
