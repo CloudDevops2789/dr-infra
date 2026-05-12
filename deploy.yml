@@ -18,7 +18,7 @@
     - name: Show environment
       debug:
         msg: "Running in environment: {{ env }}"
-        
+
     - name: Run Terraform
       community.general.terraform:
         project_path: "./terraform"
@@ -36,17 +36,28 @@
         TF_IN_AUTOMATION: "true"
         TF_INPUT: "false"
 
-    - name: Get EC2 IP
-      command: terraform output -raw ec2_public_ip
+    - name: Get DC IP
+      command: terraform output -raw dc_public_ip
       args:
         chdir: "./terraform"
-      register: ec2_ip
+      register: dc_ip
 
-    - name: Show EC2 IP
+    - name: Get Web IP
+      command: terraform output -raw web_public_ip
+      args:
+        chdir: "./terraform"
+      register: web_ip
+
+    - name: Show DC IP
       debug:
-        msg: "EC2 Public IP: {{ ec2_ip.stdout }}"
+        msg: "DC Public IP: {{ dc_ip.stdout }}"
 
-    - name: Pass EC2 IP to next job
+    - name: Show Web IP
+      debug:
+        msg: "Web Public IP: {{ web_ip.stdout }}"
+
+    - name: Pass IPs to next workflow
       set_stats:
         data:
-          target_host: "{{ ec2_ip.stdout }}"
+          dc_host: "{{ dc_ip.stdout }}"
+          web_host: "{{ web_ip.stdout }}"
