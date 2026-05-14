@@ -50,14 +50,14 @@
 
     - name: Show DC IP
       debug:
-        msg: "DC Public IP: {{ dc_ip.stdout }}"
+        msg: "DC Private IP: {{ dc_private_ip.stdout }}"
 
     - name: Show Web IP
       debug:
-        msg: "Web Public IP: {{ web_ip.stdout }}"
+        msg: "Web Public IP: {{ web_public_ip.stdout }}"
 
     - name: Pass IPs to next workflow
       set_stats:
         data:
-          dc_host: "{{ dc_ip.stdout }}"
-          web_host: "{{ web_ip.stdout }}"
+          dc_host: "{{ dc_private_ip.stdout }}"
+          web_host: "{{ web_public_ip.stdout }}"
