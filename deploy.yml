@@ -37,7 +37,7 @@
         TF_INPUT: "false"
 
     - name: Get DC IP
-      command: terraform output -raw dc_public_ip
+      command: terraform output -raw dc_private_ip
       args:
         chdir: "./terraform"
       register: dc_ip
