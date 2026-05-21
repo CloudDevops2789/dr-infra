@@ -1,6 +1,6 @@
 resource "aws_instance" "dc_server" {
   ami                         = "ami-06d0a8422df15ed90"
-  instance_type               = "t3.medium"
+  instance_type               = "t3.micro"
   key_name                    = var.key_name
   subnet_id                   = aws_subnet.dr_public_subnet.id
   vpc_security_group_ids      = [aws_security_group.dc_sg.id]
