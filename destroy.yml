@@ -31,8 +31,10 @@
 
     - name: Terraform Destroy
       command: >
-        terraform destroy -auto-approve
-        -var="environment={{ env }}"
+        terraform destroy
+        -auto-approve
+        -lock-timeout=300s
+        -var=environment={{ env }}
       args:
         chdir: "./terraform"
       environment:
