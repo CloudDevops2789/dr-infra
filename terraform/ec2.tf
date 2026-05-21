@@ -1,5 +1,5 @@
 resource "aws_instance" "dc_server" {
-  ami                         = "ami-06d0a8422df15ed90"
+  ami                         = "ami-0b58e6067b60f6b2f"
   instance_type               = "t3.micro"
   key_name                    = var.key_name
   subnet_id                   = aws_subnet.dr_public_subnet.id
@@ -16,7 +16,7 @@ resource "aws_instance" "dc_server" {
 }
 
 resource "aws_instance" "web_server" {
-  ami                         = "ami-0b58e6067b60f6b2f"
+  ami                         = "ami-06d0a8422df15ed90"
   instance_type               = "t3.micro"
   key_name                    = var.key_name
   subnet_id                   = aws_subnet.dr_public_subnet.id
