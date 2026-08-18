@@ -1,39 +1,22 @@
-set +H
-
-cd "<your-working-directory>"
-
-git clone \
-  --branch feature/tagging-legacy-state-migration \
-  --single-branch \
-  https://github.com/CloudDevops2789/terraform_modules.git \
-  terraform_modules_fv_transfer
-
-cd terraform_modules_fv_transfer
-
-echo "=== BRANCH ==="
-git branch --show-current
+echo "===== COMMON TAG VALUES ====="
+cat terraform/environments/sandbox/stacks/common-tags.tfvars
 
 echo
-echo "=== HEAD ==="
-git log -1 --oneline --decorate
+echo "===== FOUNDATION TAG VARIABLE ====="
+grep -n -A 35 \
+  'variable "tags"' \
+  terraform/stacks/foundation/variables.tf
 
 echo
-echo "=== STATUS ==="
-git status --short
+echo "===== FOUNDATION TAG USAGE ====="
+grep -R -n -E \
+  'var\.tags|tags[[:space:]]*=' \
+  terraform/stacks/foundation \
+  --include='*.tf'
 
 echo
-echo "=== VERIFY LEGACY STATE INVENTORY PLAYBOOK ==="
-test -f playbooks/terraform_legacy_state_inventory.yml \
-  && echo "PASS: legacy state inventory playbook present" \
-  || echo "FAIL: legacy state inventory playbook missing"
-
-echo
-echo "=== VERIFY FAIRVIEW TAGGING ==="
-rg -n '"fv:(it_cost_center|department|cmdb_calculated_app|business_criticality|environment|data_classification|project_name|managed_by)"' \
-  terraform/stacks \
-  --glob '*.tf' \
-  | head -n 50
-
-echo
-echo "=== VERIFY EXPECTED COMMIT ==="
-git log --oneline -5
+echo "===== PLATFORM TAG INTERFACE ====="
+grep -R -n -E \
+  'variable "org_|variable "tags"|org_required|local\..*tags|tags[[:space:]]*=' \
+  terraform/stacks/platform \
+  --include='*.tf'
