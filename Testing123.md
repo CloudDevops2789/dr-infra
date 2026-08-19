@@ -1,22 +1,9 @@
-echo "===== COMMON TAG VALUES ====="
-cat terraform/environments/sandbox/stacks/common-tags.tfvars
-
-echo
-echo "===== FOUNDATION TAG VARIABLE ====="
-grep -n -A 35 \
-  'variable "tags"' \
-  terraform/stacks/foundation/variables.tf
-
-echo
-echo "===== FOUNDATION TAG USAGE ====="
-grep -R -n -E \
-  'var\.tags|tags[[:space:]]*=' \
-  terraform/stacks/foundation \
-  --include='*.tf'
-
-echo
-echo "===== PLATFORM TAG INTERFACE ====="
-grep -R -n -E \
-  'variable "org_|variable "tags"|org_required|local\..*tags|tags[[:space:]]*=' \
-  terraform/stacks/platform \
-  --include='*.tf'
+Quick clarification before the script, since it'll help you sound sharp in the room: SAML and MFA are not the same thing, and it's worth not conflating them in front of the security team. SAML is a federation protocol — it's how one system (Client VPN) trusts another system (an identity provider) to vouch for "yes, this user is who they say they are," nothing more. MFA is a property of how that identity provider actually authenticated the user — password only, password + push, password + hardware key, etc. You can have SAML with zero MFA behind it (just username/password at the IdP), and you can have MFA with zero SAML (like AWS Managed AD's native MFA integration, which doesn't involve SAML at all). So the honest framing for the meeting is: "we need MFA — SAML is just one possible transport for getting there, not a requirement in itself."
+Here's a natural flow you could actually talk through:
+Thanks for making time — I know SCP changes aren't something you hand out lightly, so I wanted to walk through what we're actually trying to do and get your read on it rather than just asking for access.
+So first thing — we've been running trials in the sandbox account, and we've hit a few SCP guardrails that are blocking us from modifying or tearing down some of the resources we spun up ourselves. Totally understand if that's intentional, but for a trial account where we're the ones creating this stuff, we do need to be able to clean up after ourselves — otherwise every experiment turns into something we can't undo without opening a ticket with you. Can you tell me what's actually being restricted there, and whether there's a scoped way to loosen that just for resources we've tagged as ours, without touching the broader guardrails you've got in place for the rest of the account?
+Second thing, and this is the bigger design question — we're building out Client VPN for the recovery environment, and the plan is to authenticate users against an AWS Managed Microsoft AD that lives inside the IRE account itself, not tied to production AD. The reasoning there is pretty deliberate: if the incident that triggers a recovery is something that compromises production identity, we don't want our way into the recovery environment to depend on the same thing that just got compromised. So we want that AD to be self-contained.
+That's actually what leads into the next thing — we also need MFA on top of that, and this is where I wanted your input rather than just picking something. The obvious enterprise answer is IAM Identity Center, but Identity Center is an org-level service — it's one instance per AWS Organization, not something we can stand up just inside our account. So if we go that route, our recovery environment's login is now depending on the same org-wide identity plane as everything else, which is exactly the coupling we're trying to avoid. Is there an appetite to treat this IRE account differently — either its own Organization down the line, or some other pattern you've already solved for isolated/break-glass environments? I don't want to design around IAM Identity Center by default if it quietly reintroduces the dependency we're trying to get rid of.
+If Identity Center's off the table for that reason, our fallback is MFA through the Managed AD directly — no third-party RADIUS vendor, no SAML, just certificate plus AD credential as the two factors. Wanted to flag that path to you too, in case there's a reason it wouldn't fly on your end — data classification, audit requirements, whatever it might be.
+Last thing, and honestly the most practical one — everything we're provisioning goes through AAP end to end, no manual console work. But we do need some way to actually go look at what got created and sanity-check it — confirm a VPC looks right, check a security group, verify the directory's actually healthy — before we trust an automated run. Right now we don't have any human path into the account at all, which makes validation basically impossible. I'm not asking for standing admin access — more like, is there a break-glass or time-bound pattern you'd be comfortable with, scoped to read-only or to a specific role, just so we're not flying blind on what AAP actually did?
+That's everything on my end — happy to go in whatever order makes sense for you, or if it's easier, I can send this over in writing first and we use the meeting to work through whichever ones need a real conversation.
