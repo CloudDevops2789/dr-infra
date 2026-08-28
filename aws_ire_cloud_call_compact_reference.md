@@ -44,6 +44,13 @@ If they ask what CA chain means, respond: “It is simply the chain of trust fro
 
 If they ask whether you need client certificates, respond: “At this stage the ask is only for the server-side TLS certificate used by the AWS Client VPN endpoint. We are not asking for individual client certificates unless the final authentication design explicitly chooses mutual certificate authentication.”
 
+----------
+
+For the server side, our preference is to request the Client VPN TLS server certificate through AWS Certificate Manager (ACM) in the same Region as the Client VPN endpoint, so that ACM manages the private key and renewal. Can you confirm whether that is the approved Fairview model and whether the required cross-account CA permissions are already in place?
+
+For mutual authentication, each approved administrator/device will have its own key pair and submit a Certificate Signing Request (CSR). We need to understand the Fairview process for submitting those CSRs to the Private CA, which certificate template/profile should be used for client authentication, how the signed client certificates are returned, and how individual client certificates are revoked if a user or device should no longer have access.
+
+
 ## Site-to-Site VPN
 
 “On the AWS Site-to-Site VPN side, I do not want us to invent a different pattern if Fairview already has a standard implementation. Could you walk me through how Fairview normally connects an on-premises location to AWS when Transit Gateway is involved, especially the on-premises device, routing method and the AWS-side handoff?”
