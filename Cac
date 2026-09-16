@@ -1,0 +1,426 @@
+# =============================================================================
+# IRE Terraform Job Templates
+#
+# Naming convention:
+#   IRE - Terraform - <Stack> - <Action>
+#
+# Project:
+#   IRE-Infrastructure-Deployment
+#
+# Inventory:
+#   IRE-Inventory
+#
+# Execution Environment:
+#   CAC_Custom_EE
+#
+# AWS credential:
+#   Fairview Delinea AWS Credential
+#
+# Identity additionally requires:
+#   IRE Sandbox Managed AD Bootstrap
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Persistent
+# -----------------------------------------------------------------------------
+
+- name: "IRE - Terraform - Persistent - Plan"
+  description: "Terraform plan for the IRE Persistent stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/plan/persistent.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Persistent - Apply"
+  description: "Terraform apply for the IRE Persistent stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/apply/persistent.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Persistent - Destroy"
+  description: "Terraform destroy for the IRE Persistent stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/destroy/persistent.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+# -----------------------------------------------------------------------------
+# Platform
+# -----------------------------------------------------------------------------
+
+- name: "IRE - Terraform - Platform - Plan"
+  description: "Terraform plan for the IRE Platform stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/plan/platform.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Platform - Apply"
+  description: "Terraform apply for the IRE Platform stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/apply/platform.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Platform - Destroy"
+  description: "Terraform destroy for the IRE Platform stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/destroy/platform.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+# -----------------------------------------------------------------------------
+# Inspection
+# -----------------------------------------------------------------------------
+
+- name: "IRE - Terraform - Inspection - Plan"
+  description: "Terraform plan for the IRE Inspection stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/plan/inspection.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Inspection - Apply"
+  description: "Terraform apply for the IRE Inspection stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/apply/inspection.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Inspection - Destroy"
+  description: "Terraform destroy for the IRE Inspection stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/destroy/inspection.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+# -----------------------------------------------------------------------------
+# Identity
+# -----------------------------------------------------------------------------
+
+- name: "IRE - Terraform - Identity - Plan"
+  description: "Terraform plan for the IRE Identity and Managed AD stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/plan/identity.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+    - "IRE Sandbox Managed AD Bootstrap"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Identity - Apply"
+  description: "Terraform apply for the IRE Identity and Managed AD stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/apply/identity.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+    - "IRE Sandbox Managed AD Bootstrap"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Identity - Destroy"
+  description: "Terraform destroy for the IRE Identity and Managed AD stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/destroy/identity.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+    - "IRE Sandbox Managed AD Bootstrap"
+  extra_vars:
+    terraform_variables: {}
+
+# -----------------------------------------------------------------------------
+# Remote Access
+# -----------------------------------------------------------------------------
+
+- name: "IRE - Terraform - Remote Access - Plan"
+  description: "Terraform plan for the IRE Remote Access stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/plan/remote-access.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Remote Access - Apply"
+  description: "Terraform apply for the IRE Remote Access stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/apply/remote-access.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Remote Access - Destroy"
+  description: "Terraform destroy for the IRE Remote Access stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/destroy/remote-access.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+# -----------------------------------------------------------------------------
+# Recovery
+# -----------------------------------------------------------------------------
+
+- name: "IRE - Terraform - Recovery - Plan"
+  description: "Terraform plan for the IRE Recovery stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/plan/recovery.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Recovery - Apply"
+  description: "Terraform apply for the IRE Recovery stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/apply/recovery.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
+
+- name: "IRE - Terraform - Recovery - Destroy"
+  description: "Terraform destroy for the IRE Recovery stack"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "playbooks/terraform/destroy/recovery.yml"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+  extra_vars:
+    terraform_variables: {}
