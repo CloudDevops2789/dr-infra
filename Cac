@@ -1,3 +1,43 @@
+- name: "IRE - Managed AD - Bootstrap"
+  description: "Bootstraps required IRE Managed AD users and groups and publishes runtime identity artifacts"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "<actual Managed AD bootstrap playbook path>"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+    - "IRE Sandbox Managed AD Bootstrap"
+
+- name: "IRE - Managed AD - Unbootstrap"
+  description: "Removes IRE-managed AD users/groups created by the Managed AD bootstrap workflow"
+  organization: "{{ aap_org }}"
+  project: "IRE-Infrastructure-Deployment"
+  playbook: "<actual Managed AD unbootstrap playbook path>"
+  execution_environment: "CAC_Custom_EE"
+  inventory: "IRE-Inventory"
+  job_type: "run"
+  verbosity: 0
+  timeout: 0
+  allow_simultaneous: false
+  use_fact_cache: false
+  survey_enabled: false
+  become_enabled: false
+  diff_mode: false
+  ask_variables_on_launch: false
+  credentials:
+    - "Fairview Delinea AWS Credential"
+    - "IRE Sandbox Managed AD Bootstrap"
+
 # =============================================================================
 # IRE Terraform Job Templates
 #
