@@ -1,0 +1,279 @@
+---
+# IRE workflow definitions.
+#
+# Uses infra.aap_configuration controller_workflows and the documented
+# simplified_workflow_nodes model. The graph mirrors the intended HOME AWX
+# Full Deploy / Full Destroy workflows while mapping names to organization JTs.
+#
+# Note:
+# - The Managed AD group SID is intentionally NOT defined here.
+#   bootstrap.yml publishes it via set_stats and downstream Remote Access
+#   receives it as a workflow artifact; the runtime variable task maps it to
+#   client_vpn_access_group_id.
+# - Current organization Client VPN authentication_type is directory, so only
+#   server_certificate_arn is injected. Add client_root_certificate_chain_arn
+#   when directory_and_mutual is enabled.
+
+controller_workflows:
+
+  - name: "IRE - Sandbox - Full Deploy"
+    description: "Deploys the complete IRE Sandbox lifecycle in dependency order"
+    organization: "{{ ire_aap_org }}"
+    inventory: "{{ ire_inventory }}"
+    allow_simultaneous: false
+    ask_variables_on_launch: false
+    destroy_current_nodes: true
+    simplified_workflow_nodes:
+
+      - identifier: persistent_plan
+        unified_job_template: "IRE - Terraform - Persistent - Plan"
+        success_nodes:
+          - persistent_apply
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: persistent_apply
+        unified_job_template: "IRE - Terraform - Persistent - Apply"
+        success_nodes:
+          - platform_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: platform_plan
+        unified_job_template: "IRE - Terraform - Platform - Plan"
+        success_nodes:
+          - platform_apply
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: platform_apply
+        unified_job_template: "IRE - Terraform - Platform - Apply"
+        success_nodes:
+          - inspection_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: inspection_plan
+        unified_job_template: "IRE - Terraform - Inspection - Plan"
+        success_nodes:
+          - inspection_apply
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: inspection_apply
+        unified_job_template: "IRE - Terraform - Inspection - Apply"
+        success_nodes:
+          - identity_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: identity_plan
+        unified_job_template: "IRE - Terraform - Identity - Plan"
+        success_nodes:
+          - identity_apply
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: identity_apply
+        unified_job_template: "IRE - Terraform - Identity - Apply"
+        success_nodes:
+          - managed_ad_bootstrap
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: managed_ad_bootstrap
+        unified_job_template: "IRE - Managed AD - Bootstrap"
+        extra_data:
+          directory_environment: "{{ ire_environment }}"
+          managed_ad_bootstrap_group_name: "{{ ire_managed_ad_group_name }}"
+          managed_ad_bootstrap_users: "{{ ire_managed_ad_bootstrap_users }}"
+          managed_ad_bootstrap_reset_existing_passwords: false
+        success_nodes:
+          - remote_access_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: remote_access_plan
+        unified_job_template: "IRE - Terraform - Remote Access - Plan"
+        extra_data:
+          terraform_variables:
+            server_certificate_arn: "{{ ire_client_vpn_server_certificate_arn }}"
+        success_nodes:
+          - remote_access_apply
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: remote_access_apply
+        unified_job_template: "IRE - Terraform - Remote Access - Apply"
+        extra_data:
+          terraform_variables:
+            server_certificate_arn: "{{ ire_client_vpn_server_certificate_arn }}"
+        success_nodes:
+          - recovery_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: recovery_plan
+        unified_job_template: "IRE - Terraform - Recovery - Plan"
+        extra_data:
+          terraform_variables:
+            demo_ec2_enabled: "{{ ire_recovery_demo_ec2_enabled }}"
+        success_nodes:
+          - recovery_apply
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: recovery_apply
+        unified_job_template: "IRE - Terraform - Recovery - Apply"
+        extra_data:
+          terraform_variables:
+            demo_ec2_enabled: "{{ ire_recovery_demo_ec2_enabled }}"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+
+  - name: "IRE - Sandbox - Full Destroy"
+    description: "Destroys the complete IRE Sandbox lifecycle in dependency-safe order"
+    organization: "{{ ire_aap_org }}"
+    inventory: "{{ ire_inventory }}"
+    allow_simultaneous: false
+    ask_variables_on_launch: false
+    destroy_current_nodes: true
+    simplified_workflow_nodes:
+
+      - identifier: recovery_destroy_plan
+        unified_job_template: "IRE - Terraform - Recovery - Destroy Plan"
+        extra_data:
+          terraform_destroy_enabled: false
+          terraform_destroy_confirmation: ""
+          terraform_variables:
+            demo_ec2_enabled: "{{ ire_recovery_demo_ec2_enabled }}"
+        success_nodes:
+          - recovery_destroy
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: recovery_destroy
+        unified_job_template: "IRE - Terraform - Recovery - Destroy"
+        extra_data:
+          terraform_destroy_enabled: true
+          terraform_destroy_confirmation: "DESTROY RECOVERY"
+          terraform_variables:
+            demo_ec2_enabled: "{{ ire_recovery_demo_ec2_enabled }}"
+        success_nodes:
+          - identity_contract_read
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: identity_contract_read
+        unified_job_template: "IRE - Managed AD - Contract Read"
+        success_nodes:
+          - remote_access_destroy_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: remote_access_destroy_plan
+        unified_job_template: "IRE - Terraform - Remote Access - Destroy Plan"
+        extra_data:
+          terraform_destroy_enabled: false
+          terraform_destroy_confirmation: ""
+          terraform_variables:
+            server_certificate_arn: "{{ ire_client_vpn_server_certificate_arn }}"
+        success_nodes:
+          - remote_access_destroy
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: remote_access_destroy
+        unified_job_template: "IRE - Terraform - Remote Access - Destroy"
+        extra_data:
+          terraform_destroy_enabled: true
+          terraform_destroy_confirmation: "DESTROY REMOTE ACCESS"
+          terraform_variables:
+            server_certificate_arn: "{{ ire_client_vpn_server_certificate_arn }}"
+        success_nodes:
+          - managed_ad_unbootstrap
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: managed_ad_unbootstrap
+        unified_job_template: "IRE - Managed AD - Unbootstrap"
+        extra_data:
+          directory_environment: "{{ ire_environment }}"
+          managed_ad_unbootstrap_group_name: "{{ ire_managed_ad_group_name }}"
+          managed_ad_unbootstrap_users: "{{ ire_managed_ad_bootstrap_users }}"
+          managed_ad_unbootstrap_delete_users: true
+          managed_ad_unbootstrap_delete_secrets: true
+          managed_ad_unbootstrap_secret_recovery_days: 7
+          managed_ad_unbootstrap_confirmation: "REMOVE MANAGED AD USERS"
+        success_nodes:
+          - identity_destroy_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: identity_destroy_plan
+        unified_job_template: "IRE - Terraform - Identity - Destroy Plan"
+        success_nodes:
+          - identity_destroy
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: identity_destroy
+        unified_job_template: "IRE - Terraform - Identity - Destroy"
+        extra_data:
+          terraform_destroy_enabled: true
+          terraform_destroy_confirmation: "DESTROY IDENTITY"
+        success_nodes:
+          - inspection_destroy_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: inspection_destroy_plan
+        unified_job_template: "IRE - Terraform - Inspection - Destroy Plan"
+        success_nodes:
+          - inspection_destroy
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: inspection_destroy
+        unified_job_template: "IRE - Terraform - Inspection - Destroy"
+        extra_data:
+          terraform_destroy_enabled: true
+          terraform_destroy_confirmation: "DESTROY INSPECTION"
+        success_nodes:
+          - platform_destroy_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: platform_destroy_plan
+        unified_job_template: "IRE - Terraform - Platform - Destroy Plan"
+        success_nodes:
+          - platform_destroy
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: platform_destroy
+        unified_job_template: "IRE - Terraform - Platform - Destroy"
+        extra_data:
+          terraform_destroy_enabled: true
+          terraform_destroy_confirmation: "DESTROY PLATFORM"
+        success_nodes:
+          - persistent_destroy_plan
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: persistent_destroy_plan
+        unified_job_template: "IRE - Terraform - Persistent - Destroy Plan"
+        success_nodes:
+          - persistent_destroy
+        failure_nodes: []
+        always_nodes: []
+
+      - identifier: persistent_destroy
+        unified_job_template: "IRE - Terraform - Persistent - Destroy"
+        extra_data:
+          terraform_destroy_enabled: true
+          terraform_destroy_confirmation: "DESTROY PERSISTENT"
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []

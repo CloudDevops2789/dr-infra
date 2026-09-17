@@ -1,0 +1,644 @@
+---
+# IRE Job Templates for the organization AAP Controller.
+#
+# Source of truth used to build this template:
+# - Home AWX 24.6.1 API snapshot
+# - Current stack-specific Terraform lifecycle playbooks
+#
+# Intentional organization adaptations:
+# - Project, Inventory, EE and credential names use organization objects.
+# - Runtime values are supplied by ire_org_vars.yml / workflow node extra_data.
+# - Legacy HOME objects under IRE_Project and legacy IRE-INFRASTRUCTURE-* flows
+#   are intentionally not reproduced.
+#
+# The infra.aap_configuration dispatch role accepts controller_templates.
+
+controller_templates:
+
+  # ===========================================================================
+  # Persistent
+  # ===========================================================================
+
+  - name: "IRE - Terraform - Persistent - Plan"
+    description: "Terraform plan for the IRE Persistent stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/plan/persistent.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Persistent - Apply"
+    description: "Terraform apply for the IRE Persistent stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/apply/persistent.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Persistent - Destroy Plan"
+    description: "Non-destructive Terraform destroy plan for the IRE Persistent stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/persistent.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Persistent - Destroy"
+    description: "Authorized Terraform destroy for the IRE Persistent stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/persistent.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  # ===========================================================================
+  # Platform
+  # ===========================================================================
+
+  - name: "IRE - Terraform - Platform - Plan"
+    description: "Terraform plan for the IRE Platform stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/plan/platform.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Platform - Apply"
+    description: "Terraform apply for the IRE Platform stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/apply/platform.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Platform - Destroy Plan"
+    description: "Non-destructive Terraform destroy plan for the IRE Platform stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/platform.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Platform - Destroy"
+    description: "Authorized Terraform destroy for the IRE Platform stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/platform.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  # ===========================================================================
+  # Inspection
+  # ===========================================================================
+
+  - name: "IRE - Terraform - Inspection - Plan"
+    description: "Terraform plan for the IRE Inspection stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/plan/inspection.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Inspection - Apply"
+    description: "Terraform apply for the IRE Inspection stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/apply/inspection.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Inspection - Destroy Plan"
+    description: "Non-destructive Terraform destroy plan for the IRE Inspection stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/inspection.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Inspection - Destroy"
+    description: "Authorized Terraform destroy for the IRE Inspection stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/inspection.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  # ===========================================================================
+  # Identity
+  # ===========================================================================
+
+  - name: "IRE - Terraform - Identity - Plan"
+    description: "Terraform plan for the IRE Identity stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/plan/identity.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+      - "{{ ire_managed_ad_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Identity - Apply"
+    description: "Terraform apply for the IRE Identity stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/apply/identity.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+      - "{{ ire_managed_ad_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Identity - Destroy Plan"
+    description: "Non-destructive Terraform destroy plan for the IRE Identity stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/identity.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+      - "{{ ire_managed_ad_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Identity - Destroy"
+    description: "Authorized Terraform destroy for the IRE Identity stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/identity.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+      - "{{ ire_managed_ad_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  # ===========================================================================
+  # Managed AD lifecycle support
+  # ===========================================================================
+
+  - name: "IRE - Managed AD - Contract Read"
+    description: "Reads the Identity state contract needed for Managed AD teardown"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/directory/read_identity_contract.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: false
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      managed_ad_group_name: "{{ ire_managed_ad_group_name }}"
+
+  - name: "IRE - Managed AD - Bootstrap"
+    description: "Bootstraps IRE Managed AD users/groups and publishes workflow artifacts"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/directory/bootstrap.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      # HOME AWX uses only the AWS credential on this JT. The Managed AD
+      # password credential is attached to the Identity Terraform JTs.
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      directory_environment: "{{ ire_environment }}"
+      directory_aws_region: "{{ ire_aws_region }}"
+      managed_ad_bootstrap_reset_existing_passwords: false
+
+  - name: "IRE - Managed AD - Unbootstrap"
+    description: "Removes IRE-managed AD users/groups before Identity teardown"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/directory/unbootstrap.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      directory_environment: "{{ ire_environment }}"
+      directory_aws_region: "{{ ire_aws_region }}"
+
+  # ===========================================================================
+  # Remote Access
+  # ===========================================================================
+
+  - name: "IRE - Terraform - Remote Access - Plan"
+    description: "Terraform plan for the IRE Remote Access stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/plan/remote-access.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Remote Access - Apply"
+    description: "Terraform apply for the IRE Remote Access stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/apply/remote-access.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Remote Access - Destroy Plan"
+    description: "Non-destructive Terraform destroy plan for the IRE Remote Access stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/remote-access.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Remote Access - Destroy"
+    description: "Authorized Terraform destroy for the IRE Remote Access stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/remote-access.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  # ===========================================================================
+  # Recovery
+  # ===========================================================================
+
+  - name: "IRE - Terraform - Recovery - Plan"
+    description: "Terraform plan for the IRE Recovery stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/plan/recovery.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Recovery - Apply"
+    description: "Terraform apply for the IRE Recovery stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/apply/recovery.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Recovery - Destroy Plan"
+    description: "Non-destructive Terraform destroy plan for the IRE Recovery stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/recovery.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}
+
+  - name: "IRE - Terraform - Recovery - Destroy"
+    description: "Authorized Terraform destroy for the IRE Recovery stack"
+    organization: "{{ ire_aap_org }}"
+    project: "{{ ire_project }}"
+    playbook: "playbooks/terraform/destroy/recovery.yml"
+    execution_environment: "{{ ire_execution_environment }}"
+    inventory: "{{ ire_inventory }}"
+    job_type: "run"
+    verbosity: 0
+    timeout: 0
+    allow_simultaneous: false
+    use_fact_cache: false
+    survey_enabled: false
+    become_enabled: false
+    diff_mode: false
+    ask_variables_on_launch: true
+    credentials:
+      - "{{ ire_aws_credential }}"
+    extra_vars:
+      terraform_destroy_enabled: false
+      terraform_destroy_confirmation: ""
+      terraform_variables: {}

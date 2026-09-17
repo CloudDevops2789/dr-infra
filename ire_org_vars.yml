@@ -1,0 +1,38 @@
+---
+# IRE organization-specific CaC variables.
+#
+# Keep environment-specific/runtime values here rather than duplicating them
+# across every Job Template and Workflow node.
+
+ire_aap_org: "{{ aap_org }}"
+ire_project: "IRE-Infrastructure-Deployment"
+ire_inventory: "IRE-Inventory"
+ire_execution_environment: "CAC_Custom_EE"
+
+ire_aws_credential: "Fairview Delinea AWS Credential"
+ire_managed_ad_credential: "IRE Sandbox Managed AD Bootstrap"
+
+ire_environment: "sandbox"
+ire_aws_region: "us-east-2"
+
+# Managed AD bootstrap policy.
+ire_managed_ad_group_name: "IRE-VPN-Users"
+
+# Replace with the approved organization AD users before applying CaC.
+ire_managed_ad_bootstrap_users:
+  - "<approved-user-1>"
+  - "<approved-user-2>"
+
+# Existing ACM server certificate for AWS Client VPN.
+# Do not commit a certificate ARN here if your organization treats account
+# resource identifiers as runtime configuration. In that case inject this
+# variable from the CaC execution environment instead.
+ire_client_vpn_server_certificate_arn: "<approved-acm-server-certificate-arn>"
+
+# Current organization remote-access mode is directory authentication.
+# Keep this unset until mutual/directory_and_mutual authentication is enabled.
+# ire_client_vpn_client_root_certificate_chain_arn: "<approved-client-root-certificate-arn>"
+
+# Recovery demo workload is deliberately explicit because enabling it can
+# create chargeable compute resources.
+ire_recovery_demo_ec2_enabled: false
