@@ -1,4 +1,4 @@
-- name: "IRE - Managed AD - Bootstrap"
+³- name: "IRE - Managed AD - Bootstrap"
   description: "Bootstraps required IRE Managed AD users and groups and publishes runtime identity artifacts"
   organization: "{{ aap_org }}"
   project: "IRE-Infrastructure-Deployment"
@@ -464,3 +464,17 @@
     - "Fairview Delinea AWS Credential"
   extra_vars:
     terraform_variables: {}
+
+  - |
+      RUN EASYRSA_VERSION="3.2.6" && \
+          EASYRSA_URL="https://github.com/OpenVPN/easy-rsa/archive/refs/tags/v${EASYRSA_VERSION}.tar.gz" && \
+          curl -fsSL -o /tmp/easyrsa.tar.gz "${EASYRSA_URL}" && \
+          mkdir -p /opt/easy-rsa && \
+          tar -xzf /tmp/easyrsa.tar.gz \
+            --strip-components=2 \
+            -C /opt/easy-rsa \
+            "easy-rsa-${EASYRSA_VERSION}/easyrsa3" && \
+          ln -s /opt/easy-rsa/easyrsa /usr/local/bin/easyrsa && \
+          chmod 0755 /opt/easy-rsa/easyrsa && \
+          rm -f /tmp/easyrsa.tar.gz && \
+          easyrsa --version
