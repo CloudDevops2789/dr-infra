@@ -1,38 +1,16 @@
-- name: Join Linux workload to requested domain
-  ansible.builtin.command:
-    argv:
-      - realm
-      - join
-      - "{{ workload_domain_bootstrap_domain_name }}"
-      - "--user={{ workload_domain_bootstrap_username }}"
-      - "--verbose"
-    stdin: "{{ workload_domain_bootstrap_password }}"
-    stdin_add_newline: true
-  register: workload_domain_bootstrap_linux_join
-  changed_when: workload_domain_bootstrap_linux_join.rc == 0
-  failed_when: false
-  become: true
-  no_log: true
-  when:
-    - workload_domain_bootstrap_linux_target_domain not in workload_domain_bootstrap_linux_current_realms
+# Platform-specific domain join usernames derived from the single
+# workload_domain_bootstrap_username credential value.
 
-______
+workload_domain_bootstrap_windows_username: >-
+  {{
+    workload_domain_bootstrap_username
+    if '@' in workload_domain_bootstrap_username
+    else workload_domain_bootstrap_username
+         ~ '@'
+         ~ workload_domain_bootstrap_domain_name
+  }}
 
-- name: Show sanitized Linux domain join diagnostics
-  ansible.builtin.debug:
-    msg:
-      - "rc={{ workload_domain_bootstrap_linux_join.rc }}"
-      - "stdout={{ workload_domain_bootstrap_linux_join.stdout | default('') }}"
-      - "stderr={{ workload_domain_bootstrap_linux_join.stderr | default('') }}"
-  when:
-    - workload_domain_bootstrap_linux_join is defined
-    - workload_domain_bootstrap_linux_join.rc | default(0) != 0
-
-- name: Fail when Linux domain join failed
-  ansible.builtin.fail:
-    msg: >-
-      Linux domain join failed. Review the sanitized realm join diagnostics
-      above.
-  when:
-    - workload_domain_bootstrap_linux_join is defined
-    - workload_domain_bootstrap_linux_join.rc | default(0) != 0
+workload_domain_bootstrap_linux_username: >-
+  {{
+    workload_domain_bootstrap_username.split('@')[0]
+  }}
