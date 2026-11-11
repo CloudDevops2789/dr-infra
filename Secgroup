@@ -1,1 +1,27 @@
-
+{
+  name           = "management-test-all-from-external"
+  direction      = "ingress"
+  security_group = "management"
+  protocol       = "-1"
+  peer_type      = "cidr"
+  peer           = "0.0.0.0/0"
+  description    = "TEMP TEST - Allow all external traffic to Recovery Access"
+},
+{
+  name           = "core-test-all-from-external"
+  direction      = "ingress"
+  security_group = "core"
+  protocol       = "-1"
+  peer_type      = "cidr"
+  peer           = "0.0.0.0/0"
+  description    = "TEMP TEST - Allow all external traffic to Core Recovery"
+},
+{
+  name           = "protected-test-all-from-external"
+  direction      = "ingress"
+  security_group = "protected"
+  protocol       = "-1"
+  peer_type      = "cidr"
+  peer           = "0.0.0.0/0"
+  description    = "TEMP TEST - Allow all external traffic to Protected Data"
+},
