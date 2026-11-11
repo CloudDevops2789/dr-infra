@@ -1,0 +1,48 @@
+{
+  action           = "pass"
+  protocol         = "ip"
+  source_zone      = "recovery_access"
+  destination_zone = "external"
+  description      = "TEMP TEST - Allow Recovery Access to external"
+  sid              = 3100006
+},
+{
+  action           = "pass"
+  protocol         = "ip"
+  source_zone      = "external"
+  destination_zone = "recovery_access"
+  description      = "TEMP TEST - Allow external to Recovery Access"
+  sid              = 3100007
+},
+{
+  action           = "pass"
+  protocol         = "ip"
+  source_zone      = "core_recovery"
+  destination_zone = "external"
+  description      = "TEMP TEST - Allow Core Recovery to external"
+  sid              = 3100008
+},
+{
+  action           = "pass"
+  protocol         = "ip"
+  source_zone      = "external"
+  destination_zone = "core_recovery"
+  description      = "TEMP TEST - Allow external to Core Recovery"
+  sid              = 3100009
+},
+{
+  action           = "pass"
+  protocol         = "ip"
+  source_zone      = "protected_data"
+  destination_zone = "external"
+  description      = "TEMP TEST - Allow Protected Data to external"
+  sid              = 3100010
+},
+{
+  action           = "pass"
+  protocol         = "ip"
+  source_zone      = "external"
+  destination_zone = "protected_data"
+  description      = "TEMP TEST - Allow external to Protected Data"
+  sid              = 3100011
+}
