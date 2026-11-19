@@ -1,0 +1,21 @@
+echo "===== FIREWALL ZONE IMPLEMENTATION ====="
+
+grep -Rn -C 8 \
+  --include='*.tf' \
+  'network_firewall_zone_cidrs' \
+  terraform/stacks/inspection
+
+echo
+echo "===== FIREWALL RULE TRANSLATION ====="
+
+grep -Rn -C 5 \
+  --include='*.tf' \
+  -E 'source_zone|destination_zone|network_firewall_rules_string' \
+  terraform/stacks/inspection
+
+echo
+echo "===== FIREWALL LOGGING CONFIG ====="
+
+grep -n -A 70 \
+  'Network Firewall Logging' \
+  terraform/environments/sandbox/config/inspection.tfvars
