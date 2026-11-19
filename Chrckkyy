@@ -1,0 +1,11 @@
+echo "===== PLATFORM PEERING CONFIG ====="
+
+sed -n '470,535p' \
+  terraform/environments/sandbox/config/platform.tfvars
+
+echo
+echo "===== CORE RECOVERY SG RULES ====="
+
+grep -n -A 12 -B 3 \
+  'security_group.*"core"' \
+  terraform/environments/sandbox/config/platform-network-policy.tfvars
