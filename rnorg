@@ -1,0 +1,13 @@
+echo "===== BRANCH ====="
+git branch --show-current
+git status --short
+
+echo "===== PEERING INPUTS ====="
+grep -n -A 45 \
+  'transit_gateway_peering = {' \
+  terraform/environments/sandbox/config/platform.tfvars
+
+echo "===== FIREWALL ZONE INPUTS ====="
+grep -n -A 35 \
+  'network_firewall_zone_cidrs' \
+  terraform/environments/sandbox/config/inspection.tfvars
